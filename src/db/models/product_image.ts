@@ -33,7 +33,9 @@ Product_image.init({
     references: {
       model: 'products',
       key: 'id'
-    }
+    },
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
   },
 }, {
   timestamps: false,

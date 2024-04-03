@@ -29,7 +29,9 @@ Product_category.init({
     references: {
       model: 'products',
       key: 'id'
-    }
+    },
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
   },
   category_id: {
     allowNull: false,
@@ -37,7 +39,9 @@ Product_category.init({
     references: {
       model: 'categories',
       key: 'id'
-    }
+    },
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
   }
 }, {
   timestamps: false,
