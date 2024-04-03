@@ -3,6 +3,7 @@ import connection from '../../configs/dbConnect';
 
 type SellerAttributes = {
   id?: number,
+  code: string,
   email: string,
   name: string,
   password: string,
@@ -18,6 +19,7 @@ export interface SellerOutput extends Required<SellerAttributes> { }
 
 class Seller extends Model<SellerAttributes, SellerInput> implements SellerAttributes {
   public id!: number;
+  public code!: string;
   public email!: string;
   public name!: string;
   public password!: string;
@@ -35,9 +37,15 @@ Seller.init({
     primaryKey: true,
     type: DataTypes.INTEGER
   },
+  code: {
+    allowNull: false,
+    type: DataTypes.STRING,
+    unique: true
+  },
   email: {
     allowNull: false,
-    type: DataTypes.STRING
+    type: DataTypes.STRING,
+    unique: true
   },
   name: {
     allowNull: false,

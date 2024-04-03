@@ -6,12 +6,22 @@ import jwt from "jsonwebtoken";
 import path from "path";
 import fs from "fs";
 
+function generateSellerCode() {
+    const num = Math.floor(Math.random() * 0xffffff) + 1;
+    let code = num.toString(16);
+    while (code.length < 6) {
+        code = '0' + code;
+    }
+    return code;
+}
+
 const register = async (req: Request, res: Response) => {
     try {
         res.locals.files = req.files;
         const photoIsExist = !!res.locals?.files.photo;
 
         const accounts = await Seller.findAll({ where: { email: req.body.email ?? '' } });
+        const names = await Seller.findAll({ where: { name: req.body.name ?? '' } });
 
         await checkSchema({
             email: {
@@ -26,6 +36,12 @@ const register = async (req: Request, res: Response) => {
             },
             name: {
                 notEmpty: { errorMessage: "Nama tidak boleh kosong." },
+                custom: {
+                    options: (async e => {
+                        if (names.length > 0)
+                            throw new Error('Nama yang anda masukkan sudah ada.');
+                    })
+                }
             },
             password: {
                 notEmpty: { errorMessage: 'Password tidak boleh kosong.' },
@@ -60,6 +76,12 @@ const register = async (req: Request, res: Response) => {
                 description: req.body.description,
                 password: await bcrypt.hash(req.body.password, 7)
             };
+
+            let code = generateSellerCode();
+            while (!!await Seller.findOne({ where: { code } })) {
+                code = generateSellerCode();
+            }
+            values['code'] = code;
 
             if (photoIsExist) {
                 let filename = (new Date().getTime()).toString(16);
