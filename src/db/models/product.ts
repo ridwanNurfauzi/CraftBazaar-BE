@@ -1,5 +1,7 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import connection from '../../configs/dbConnect';
+import Category from './category';
+import User from './user';
 
 type ProductAttributes = {
   id?: number,
@@ -79,5 +81,7 @@ Product.init({
   sequelize: connection,
   tableName: 'Products'
 });
+
+Product.belongsToMany(Category, { through: 'product_categories', foreignKey: 'product_id', otherKey: 'category_id', as: 'categories', timestamps: false });
 
 export default Product;
