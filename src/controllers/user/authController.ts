@@ -189,8 +189,96 @@ const getProfile = async (req: Request, res: Response) => {
     }
 };
 
+
+const updateProfile = async (req: Request, res: Response) => {
+    try {
+        const id = req.params.id;
+
+        const data = await User.findOne({ where: { id } });
+
+        res.locals.files = req.files;
+        const photoIsExist = !!res.locals?.files.photo;
+
+        await checkSchema({
+            email: {
+                notEmpty: { errorMessage: "Email tidak boleh kosong." },
+                isEmail: { errorMessage: "Email harus berupa email." }
+            },
+            firstname: {
+                notEmpty: { errorMessage: "Nama depan tidak boleh kosong." },
+            },
+            password: {
+                custom: {
+                    options: (async e => {
+                        if (!!e) {
+                            if (e.length < 6 || e.length > 255)
+                                throw new Error('Password berisi minimal 6 dan maksimal 255 karakter.');
+                        }
+                    })
+                }
+            },
+            confirm_password: {
+                custom: {
+                    options: (async e => {
+                        if (!!req.body.password) {
+                            if (!!!e)
+                                throw new Error('Konfirmasi password tidak boleh kosong.');
+                            if (e != req.body.password)
+                                throw new Error('Konfirmasi password harus sesuai dengan password');
+                        }
+                    })
+                }
+            }
+        }).run(req);
+        const vResult = validationResult(req);
+
+        if (!vResult.isEmpty()) {
+            return res.send({
+                success: false,
+                vError: !vResult.isEmpty(),
+                vResult: vResult
+            });
+        }
+        else {
+            let values: any = {
+                email: req.body.email,
+                firstname: req.body.firstname,
+                lastname: req.body.lastname,
+                password: await bcrypt.hash(req.body.password, 7),
+                photo: null
+            };
+
+            if (fs.existsSync(path.join(`${__dirname}/../../../public/images/profiles/user/${data?.photo}`)))
+                await fs.promises.unlink(path.join(`${__dirname}/../../../public/images/profiles/user/${data?.photo}`));
+
+            if (photoIsExist) {
+                let filename = (new Date().getTime()).toString(16);
+                let extension = path.extname(res.locals.files.photo.path);
+                values['photo'] = filename + extension;
+
+                await fs.promises.copyFile(res.locals.files.photo.path, path.join(`${__dirname}/../../../public/images/profiles/user/${values['photo']}`));
+            }
+
+            const response = await User.update(values, { where: { id } });
+
+            return res.send({
+                success: true,
+                values,
+                data: response
+            });
+        }
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({
+            success: false
+        });
+    }
+};
+
+
 export {
     register,
     login,
-    getProfile
+    getProfile,
+    updateProfile
 };
