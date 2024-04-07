@@ -94,7 +94,7 @@ const data = [
     product_id: 14
   },
   {
-    fileName: 'vas-tanah-liat.jpg',
+    fileName: 'vas-bunga-tanah-liat.jpg',
     product_id: 15
   },
 ];
