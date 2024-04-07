@@ -22,9 +22,9 @@ module.exports = {
     */
     await queryInterface.bulkInsert('users', [
       {
-        firstname: 'kk',
-        lastname: 'Ridwn',
-        email: 'kk@g.id',
+        firstname: 'User',
+        lastname: '0',
+        email: 'usr@g.id',
         password: hashing_pass('123456')
       },
       {
@@ -37,6 +37,36 @@ module.exports = {
         firstname: 'User',
         lastname: '2',
         email: 'usr2@g.id',
+        password: hashing_pass('123456')
+      },
+      {
+        firstname: 'User',
+        lastname: '3',
+        email: 'usr3@g.id',
+        password: hashing_pass('123456')
+      },
+      {
+        firstname: 'User',
+        lastname: '4',
+        email: 'usr4@g.id',
+        password: hashing_pass('123456')
+      },
+      {
+        firstname: 'User',
+        lastname: '5',
+        email: 'usr5@g.id',
+        password: hashing_pass('123456')
+      },
+      {
+        firstname: 'User',
+        lastname: '6',
+        email: 'usr6@g.id',
+        password: hashing_pass('123456')
+      },
+      {
+        firstname: 'User',
+        lastname: '7',
+        email: 'usr7@g.id',
         password: hashing_pass('123456')
       },
     ], {});
