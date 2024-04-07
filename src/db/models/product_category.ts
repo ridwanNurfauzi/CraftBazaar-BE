@@ -2,7 +2,7 @@ import { DataTypes, Model, Optional } from 'sequelize';
 import connection from '../../configs/dbConnect';
 
 type Product_categoryAttributes = {
-  id?: number,
+  id?: number | bigint,
   product_id: number,
   category_id: number
 };
@@ -11,7 +11,7 @@ export interface Product_categoryInput extends Optional<Product_categoryAttribut
 export interface Product_categoryOutput extends Required<Product_categoryAttributes> { }
 
 class Product_category extends Model<Product_categoryAttributes, Product_categoryInput> implements Product_categoryAttributes {
-  public id!: number;
+  public id!: number | bigint;
   public product_id!: number;
   public category_id!: number;
 }

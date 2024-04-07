@@ -2,7 +2,7 @@ import { DataTypes, Model, Optional } from 'sequelize';
 import connection from '../../configs/dbConnect';
 
 type Product_imageAttributes = {
-  id?: number,
+  id?: number | bigint,
   filename: string,
   product_id: number | string,
 };
@@ -11,7 +11,7 @@ export interface Product_imageInput extends Optional<Product_imageAttributes, 'i
 export interface Product_imageOutput extends Required<Product_imageAttributes> { }
 
 class Product_image extends Model<Product_imageAttributes, Product_imageInput> implements Product_imageAttributes {
-  public id!: number;
+  public id!: number | bigint;
   public filename!: string;
   public product_id!: number | string;
 }
