@@ -19,7 +19,6 @@ const verifyToken = (req: Request, res: Response, next: NextFunction) => {
                 });
             } else {
                 res.locals.admin = decode;
-                console.log(decode)
                 if (res.locals.admin.role != 'admin')
                     return res.status(403).send({
                         success: false,
