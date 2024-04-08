@@ -76,7 +76,7 @@ const show = async (req: Request, res: Response) => {
                 {
                     association: new HasMany(Seller, Subscription, {
                         foreignKey: 'seller_id',
-                        as: 'subscriptions'
+                        as: 'subscribers'
                     }),
                     include: [
                         {
@@ -101,7 +101,7 @@ const show = async (req: Request, res: Response) => {
                 attributes: {
                     exclude: ['id', 'description']
                 },
-                where: { id: data.id },
+                where: { seller_id: data.id },
                 include: [
                     {
                         association: new HasMany(Product, Product_image, {
@@ -146,12 +146,14 @@ const show = async (req: Request, res: Response) => {
                     }
                 ]
             });
-            const subscribers = await Subscription.findAll({
-                where: { seller_id: data.id }
-            });
 
             data['products'] = products;
-            data['subscribers'] = subscribers;
+            data['subscribed'] = !!(await Subscription.findOne({
+                where: {
+                    seller_id: data.id,
+                    subscriber_id: res.locals?.user?.id ?? 0
+                }
+            }));
         }
 
         if (!data)
@@ -178,7 +180,7 @@ const productFromSubscriptions = async (req: Request, res: Response) => {
         const s = subscriptions.map((e: any) => e.seller_id);
 
         const data = await Product.findAll({
-            where: { id: s },
+            where: { seller_id: s },
             attributes: {
                 exclude: ['id', 'description']
             },
