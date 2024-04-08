@@ -48,6 +48,20 @@ const verifyToken = (req: Request, res: Response, next: NextFunction) => {
     }
 };
 
+const getTokenDecode = (req: Request, res: Response, next: NextFunction) => {
+    if (req.headers.authorization) {
+        const token = req.headers.authorization.split(' ')[1];
+
+        jwt.verify(token, process.env.JWT_KEY as string, (error: VerifyErrors | null, decode) => {
+            if (!!!error) {
+                res.locals.user = decode;
+            }
+        });
+    }
+    next();
+};
+
 export {
-    verifyToken
+    verifyToken,
+    getTokenDecode
 };
