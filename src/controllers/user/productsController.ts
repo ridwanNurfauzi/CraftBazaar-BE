@@ -269,12 +269,12 @@ const popular = async (req: Request, res: Response) => {
 
 const getBySlug = async (req: Request, res: Response) => {
     try {
-        const data = await Product.findOne({
+        const response = await Product.findOne({
             where: {
                 slug: req.params.slug
             },
             attributes: {
-                exclude: ['id', 'seller_id']
+                exclude: ['seller_id']
             },
             include: [
                 {
@@ -314,12 +314,70 @@ const getBySlug = async (req: Request, res: Response) => {
                             }),
                             as: 'user',
                             attributes: {
-                                exclude: ['id', 'password']
+                                exclude: ['password']
                             }
                         }
                     ]
                 }
             ]
+        });
+
+        let data: any = response?.toJSON();
+
+        data.reviews = data?.reviews.reverse();
+        if (res.locals.user) {
+            data.personal_reviews = data.reviews.filter((e: any) =>
+                e.user.id == res.locals.user.id
+            );
+            data.showed_reviews = data.reviews.filter((e: any) =>
+                e.user.id != res.locals.user.id
+            );
+        }
+        else
+            data.showed_reviews = data.reviews;
+
+        res.send({
+            success: true,
+            data
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({
+            success: false
+        });
+    }
+};
+
+const removePersonalReview = async (req: Request, res: Response) => {
+    try {
+        const user = res.locals.user;
+        const data = await Review.destroy({
+            where:{
+                id: req.params.id ?? 0,
+                user_id: user.id ?? 0
+            }
+        });
+
+        res.send({
+            success: true,
+            data
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({
+            success: false
+        });
+    }
+};
+
+const addReview = async (req: Request, res: Response) => {
+    try {
+        const user = res.locals.user;
+        const data = await Review.create({
+            rating: req.body?.rating ?? 0,
+            text: req.body?.text ?? '',
+            product_id: req.body?.product_id ?? 0,
+            user_id: user.id ?? 0
         });
 
         res.send({
@@ -339,5 +397,7 @@ export {
     latest,
     earliest,
     popular,
-    getBySlug
+    getBySlug,
+    removePersonalReview,
+    addReview
 };
