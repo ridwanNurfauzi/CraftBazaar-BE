@@ -74,7 +74,9 @@ Product.init({
     references: {
       model: 'sellers',
       key: 'id'
-    }
+    },
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
   },
 }, {
   timestamps: true,

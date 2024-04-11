@@ -48,7 +48,9 @@ Review.init({
     references: {
       model: 'products',
       key: 'id'
-    }
+    },
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
   },
   user_id: {
     type: DataTypes.INTEGER,
@@ -56,7 +58,9 @@ Review.init({
     references: {
       model: 'users',
       key: 'id'
-    }
+    },
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
   }
 }, {
   timestamps: true,

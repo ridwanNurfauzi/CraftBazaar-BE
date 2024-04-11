@@ -29,7 +29,9 @@ Subscription.init({
     references: {
       model: 'users',
       key: 'id'
-    }
+    },
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
   },
   seller_id: {
     type: DataTypes.INTEGER,
@@ -37,7 +39,9 @@ Subscription.init({
     references: {
       model: 'sellers',
       key: 'id'
-    }
+    },
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
   }
 }, {
   timestamps: false,
