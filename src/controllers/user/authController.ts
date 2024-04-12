@@ -244,9 +244,11 @@ const updateProfile = async (req: Request, res: Response) => {
                 email: req.body.email,
                 firstname: req.body.firstname,
                 lastname: req.body.lastname,
-                password: await bcrypt.hash(req.body.password, 7),
                 photo: null
             };
+
+            if (!!req.body.password)
+                values['password'] = await bcrypt.hash(req.body.password, 7);
 
             if (fs.existsSync(path.join(`${__dirname}/../../../public/images/profiles/user/${data?.photo}`)))
                 await fs.promises.unlink(path.join(`${__dirname}/../../../public/images/profiles/user/${data?.photo}`));
