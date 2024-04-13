@@ -274,7 +274,6 @@ const updateProfile = async (req: Request, res: Response) => {
                 email: req.body.email,
                 name: req.body.name,
                 description: req.body.description ?? '',
-                password: await bcrypt.hash(req.body.password, 7),
                 photo: null
             };
 
