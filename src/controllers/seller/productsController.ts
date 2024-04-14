@@ -172,42 +172,54 @@ const show = async (req: Request, res: Response) => {
     try {
         const seller = res.locals.seller;
         const product_id = req.params.product_id;
-        const products = await Product.findOne({
+        const product = await Product.findOne({
             where: {
                 id: product_id ?? 0,
                 seller_id: seller.id ?? 0
             },
             include: [
                 {
-                    association: 'categories',
-                    attributes: {
-                        exclude: ['id', 'createdAt', 'updatedAt']
-                    }
+                    association: new HasMany(Product, Product_image, {
+                        foreignKey: 'product_id',
+                        as: 'product_images'
+                    }),
+                    attributes: ['filename']
                 },
                 {
-                    association: new HasMany(Product, Review, {
-                        foreignKey: 'product_id',
-                        as: 'reviews'
-                    }),
-                    include: [
-                        {
-                            association: new HasOne(Review, User, {
-                                as: 'user',
-                                foreignKey: 'id',
-                                sourceKey: 'user_id'
-                            }),
-                            attributes: {
-                                exclude: ['id', 'password']
-                            }
-                        }
-                    ]
+                    association: 'categories',
+                    attributes: {
+                        exclude: ['createdAt', 'updatedAt']
+                    }
                 }
             ]
         });
 
+        let data: any = null;
+
+        if (product) {
+            const reviews = await Review.findAll({
+                where: { product_id: product?.id },
+                include: [
+                    {
+                        association: new HasOne(Review, User, {
+                            as: 'user',
+                            foreignKey: 'id',
+                            sourceKey: 'user_id'
+                        }),
+                        attributes: {
+                            exclude: ['id', 'password']
+                        }
+                    }
+                ]
+            });
+
+            data = product?.toJSON();
+            data['reviews'] = reviews.reverse();
+        }
+
         res.send({
-            success: true,
-            data: products
+            success: !!data,
+            data
         });
 
     } catch (error) {
