@@ -1,9 +1,5 @@
 import { Request, Response } from "express";
-import Admin from "../../db/models/admin";
 import { checkSchema, validationResult } from "express-validator";
-import bcrypt from "bcrypt";
-import fs from "fs";
-import path from "path";
 import Category from "../../db/models/category";
 import { HasMany, HasOne } from "sequelize";
 import Product_category from "../../db/models/product_category";
@@ -20,11 +16,13 @@ const index = async (req: Request, res: Response) => {
                 {
                     association: new HasMany(Category, Product_category, {
                         foreignKey: 'product_id',
-                        sourceKey: 'id'
+                        sourceKey: 'id',
+                        as: 'product_categories'
                     })
                 }
             ]
         });
+        data.reverse();
 
         res.send({
             success: true,

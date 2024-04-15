@@ -235,7 +235,7 @@ const updateProfile = async (req: Request, res: Response) => {
                 isEmail: { errorMessage: "Email harus berupa email." }
             },
             name: {
-                notEmpty: { errorMessage: "Nama depan tidak boleh kosong." },
+                notEmpty: { errorMessage: "Nama tidak boleh kosong." },
             },
             password: {
                 custom: {
