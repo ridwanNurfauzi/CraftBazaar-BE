@@ -25,25 +25,29 @@ module.exports = {
         firstname: 'User',
         lastname: '0',
         email: 'usr@g.id',
-        password: hashing_pass('123456')
+        password: hashing_pass('123456'),
+        photo: 'dark.jpg'
       },
       {
         firstname: 'user',
         lastname: '1',
         email: 'usr1@g.id',
-        password: hashing_pass('123456')
+        password: hashing_pass('123456'),
+        photo: 'gray.jpg'
       },
       {
         firstname: 'User',
         lastname: '2',
         email: 'usr2@g.id',
-        password: hashing_pass('123456')
+        password: hashing_pass('123456'),
+        photo: 'green.jpg'
       },
       {
         firstname: 'User',
         lastname: '3',
         email: 'usr3@g.id',
-        password: hashing_pass('123456')
+        password: hashing_pass('123456'),
+        photo: 'yellow.jpg'
       },
       {
         firstname: 'User',
@@ -55,7 +59,8 @@ module.exports = {
         firstname: 'User',
         lastname: '5',
         email: 'usr5@g.id',
-        password: hashing_pass('123456')
+        password: hashing_pass('123456'),
+        photo: 'purple.jpg'
       },
       {
         firstname: 'User',
