@@ -8,7 +8,7 @@ router.get('/', verifyToken, carts.index);
 
 router.post('/', verifyToken, carts.store);
 
-router.delete('/:id', verifyToken, carts.destroy);
+router.delete('/:product_id', verifyToken, carts.destroy);
 
 router.put('/increment/:product_id', verifyToken, carts.increment);
 router.put('/decrement/:product_id', verifyToken, carts.decrement);
