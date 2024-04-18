@@ -1,15 +1,51 @@
 import { Request, Response } from "express";
 import Cart from "../../db/models/cart";
 import Product from "../../db/models/product";
+import Product_image from "../../db/models/product_image";
+import { HasMany, HasOne } from "sequelize";
+import Seller from "../../db/models/seller";
 
 const index = async (req: Request, res: Response) => {
     try {
         const user_id = res.locals.user.id ?? 0;
-        const data = await Cart.findAll({ where: { user_id } });
+        const cart = await Cart.findAll({ where: { user_id } });
+        const arr = cart.map(e => e.product_id);
+
+        const products = await Product.findAll({
+            where: { id: arr },
+            attributes: {
+                exclude: ['description']
+            },
+            include: [
+                {
+                    association: new HasOne(Product, Cart, {
+                        foreignKey: 'product_id',
+                        as: 'cart'
+                    })
+                },
+                {
+                    association: new HasMany(Product, Product_image, {
+                        foreignKey: 'product_id',
+                        as: 'product_images'
+                    }),
+                    attributes: ['filename']
+                },
+                {
+                    association: new HasOne(Product, Seller, {
+                        sourceKey: 'seller_id',
+                        foreignKey: 'id',
+                        as: 'seller'
+                    }),
+                    attributes: {
+                        exclude: ['id', 'password', 'description', 'createdAt', 'updatedAt']
+                    }
+                }
+            ]
+        });
 
         res.send({
             success: true,
-            data
+            data: products
         });
     } catch (error) {
         console.log(error);
@@ -73,9 +109,9 @@ const store = async (req: Request, res: Response) => {
 const destroy = async (req: Request, res: Response) => {
     try {
         const user_id = res.locals.user.id ?? 0;
-        const id = req.params.id;
+        const product_id = req.params.product_id;
 
-        const t = await Cart.destroy({ where: { id, user_id } });
+        const t = await Cart.destroy({ where: { product_id, user_id } });
 
         if (!t)
             return res.status(404).send({ success: false });
