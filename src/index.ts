@@ -23,8 +23,6 @@ app.use(methodOverride((req: Request, res: Response) => {
     }
 }));
 
-app.use('/public', express.static(path.join(__dirname, '../public')));
-
 app.use(appRoute);
 
 app.listen(server.port, server.host, () => {

@@ -1,11 +1,14 @@
-import { Request, Response, Router } from "express";
+import express, { Request, Response, Router } from "express";
 import userRoutes from './user';
 import sellerRoutes from './seller';
 import adminRoutes from './admin';
 
 import expressListEndpoints from "express-list-endpoints";
+import path from "path";
 
 const router = Router();
+
+router.use('/public', express.static(path.join(__dirname, '../../public')));
 
 router.get('/', (req: Request, res: Response) => {
     return res.send({
