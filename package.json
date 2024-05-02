@@ -4,6 +4,7 @@
   "description": "",
   "main": "./dist/index.js",
   "scripts": {
+    "start": "node .",
     "dev": "npx nodemon ./src/index.ts",
     "build": "npx tsc",
     "undo_migrate": "npx sequelize db:migrate:undo:all",
