@@ -17,6 +17,8 @@
   "author": "Kk Ridwn",
   "license": "ISC",
   "devDependencies": {
+    "@swc/core": "^1.5.5",
+    "@swc/helpers": "^0.5.11",
     "@types/bcrypt": "^5.0.2",
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
@@ -27,6 +29,7 @@
     "@types/node": "^20.10.6",
     "@types/sequelize": "^4.28.20",
     "@types/voca": "^1.4.5",
+    "regenerator-runtime": "^0.14.1",
     "sequelize-cli": "^6.6.2"
   },
   "dependencies": {
